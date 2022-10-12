@@ -42,5 +42,45 @@ print( (4 < 6) or True and False or False and (2 > 3))
 
 
 #9
+print(True and False and True or True)
+print(True or True and True and False)
+print((True and False) or (True and (not False)) or (False and (not False)))
+print((2 < 3) or (5 > 2) and (not 4 == 4) or 9 != 4)
+print(6 == 9 or 5 < 6 and 8 < 4 or 4 > 3)
 
 #10
+# 논리식과 산술식(값)이 결합된 수식에서는
+# 논리식의 결과가 True 면 값이 출력
+# 논리식의 결과가 False 면 False가 출력
+
+#11
+name = '원진'
+weight = 67
+age = 29
+print('이름은',name,'이고,','몸무게는', weight,'나이는', age,'살')
+
+#12
+# K나이 - 세는나이(출생시 1살, 해가 바뀌면 + 1)
+#        만나이(출생시 0살, 생일이 지나면 + 1)
+#        연나이(현재연도 - 출생연도)
+
+birthYear = 1993
+nowYear = 2022
+isPassBirth = True
+age = nowYear - birthYear
+
+print('연나이',age)
+print('세는나이',age+1)
+# 파이썬 if 단축식 : 참일때 값 if 조건식 else 거짓일때 값
+print('만나이',(age + 1) if isPassBirth else age)
+
+#13
+print('7 x 1 =', (7*1))
+print('7 x 2 =', (7*2))
+print('7 x 3 =', (7*3))
+print('7 x 4 =', (7*4))
+print('7 x 5 =', (7*5))
+print('7 x 6 =', (7*6))
+print('7 x 7 =', (7*7))
+print('7 x 8 =', (7*8))
+print('7 x 9 =', (7*9))
