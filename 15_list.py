@@ -224,7 +224,7 @@ print(isFind)
 # 입사일hdate, 직책jobid, 급여sal, 부서번호deptid
 empnos = []
 fnames = []
-lames = []
+lnames = []
 emails = []
 hdates = []
 jobids = []
@@ -256,3 +256,46 @@ for i in range(len(empnos)):
 
 # 다루어야 할 데이터의 항목수가 많을수록 일일이 리스트로 선언해서 저장하는 것은 불편
 # -> 딕셔너리, 클래스를 이용하면 편리하게 다룰수 있음
+
+# 2차원 리스트
+# 리스트 선언시 요소의 자료형에는 제약이 없음
+# 따라서 리스트의 요소로 리스트 자체를 구성할 수 있음
+
+# a,b,c 반 학생의 성적 데이터를 리스트로 구현
+# 리스트의 요소로 사용하는 리스트의 길이는 일정하지 않아도 됨
+score = [[12,45,23,78],
+         [37,63,44,25,80],
+         [36,12,37]]
+
+print(score)
+
+# 2차원 리스트 출력하기 1
+for i in range(len(score)):
+    print(score[i])
+
+# 2차원 리스트 출력하기 2
+for sc in score:
+    print(sc)
+
+# 2차원 리스트 출력하기 3
+for sc in score:
+    for s in sc:
+        print(s, end=' ')
+    print() # 요소 리스트 모든 값 출력 후 줄바꿈
+
+# 2차원 리스트 동적 생성
+# 전체 리스트 크기를 사용자로부터 입력
+# 요소로 사용하는 리스트의 크기는 난수로 생성
+# 요소 리스트를 구성하는 값 역시 난수로 생성
+import random as rnd
+
+lsts = []
+size1 = int(input('리스트의 크기는?'))
+
+for i in range(size1):
+    lst = []
+    size2 = rnd.randint(1,10)
+    for j in range(size2): # 리스트안 리스트에 값 생성
+        val = rnd.randint(50,100)
+        lst.append(val)
+    lsts.append(lst)
