@@ -69,7 +69,7 @@ with open('sungjuk.dat', encoding='utf-8' ) as f:
     while True:
         line = f.readline()
         if not line: break
-        item = line.split(',') # 각 행의 자료를 구분자로 분리해서 리스트에 저장
+        sj1 = line.split(',') # 각 행의 자료를 구분자로 분리해서 리스트에 저장
 
-        out = f'{item[0]} {item[1]} {item[2]} {item[3]}'
+        out = f'이름 : {sj1[0]} 국어 : {sj1[1]} 영어 : {sj1[2]} 수학 : {sj1[3]}'
         print(out, end='')
