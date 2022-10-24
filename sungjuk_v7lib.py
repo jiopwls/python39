@@ -1,4 +1,4 @@
-import pymysql
+import awsdbinfo as db
 
 def displayMenu():
     main_menu = f"""
@@ -39,8 +39,13 @@ def addSungJuk():
     sj = sj + [tot, avg, grd]
 
     # 처리된 성적데이터를 sungjuk 테이블에 저장
-    # pass
+    conn, cur = db.openConn()
 
+    sql = 'insert into sungjuk (name, kor, eng, mat, tot, avg, grd) values (%s, %s, %s, %s, %s, %s, %s)'
+    cur.execute(sql, sj)
+    conn.commit()
+
+    db.closeConn(cur,conn)
 def readSungJuk():
     hdr = ('-=-=-=-=-=-=-=-=-\n'
            '이름|국어|영어|수학'
@@ -48,43 +53,91 @@ def readSungJuk():
     print(hdr)
 
     # 성적테이블에서 이름/국어/영어/수학 만 select해서 출력
+    conn, cur = db.openConn()
+
+    sql = 'select name, kor, eng, mat from sungjuk order by sjno'
+    cur.execute(sql)
+    rows = cur.fetchall()
+
+    db.closeConn(conn, cur)
+
+    result = ''
+    for row in rows:
+        result += f'{row[0]} {row[1]} {row[2]} {row[3]}\n'
+    print(result)
 
 def readOneSungJuk():
     name = input('조회할 학생의 이름은?')
 
     hdr = '이름 국어 영어 수학 총점 평균 학점\n'
-    hdr += '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n'
+    hdr += '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
     print(hdr)
 
     # 입력한 학생이름으로 성적테이블을 조회해서 조회된 결과를 출력
+    conn, cur = db.openConn()
 
+    sql = 'select * from sungjuk where name = %s'
+    cur.execute(sql, [name])
+    row = cur.fetchone()
+
+    db.closeConn(conn, cur)
+
+    result = f' {row[1]} {row[2]} {row[3]} {row[4]} {row[5]} {row[6]:.1f} {row[7]}\n'
+    print(result)
 def modifySungJuk():
     name = input('수정할 학생 이름은?')
 
-    # 수정할 학생이름으로 기존데이터 조회
+    # 수정할 학생 이름으로 기존데이터 조회
+    conn, cur = db.openConn()
+    sql = 'select name, kor, eng, mat from sungjuk where name = %s'
+    cur.execute(sql, [name])
+    sj = cur.fetchone()
+    db.closeConn(conn, cur)
 
-    # 새로운(기존) 값을 입력
-    kor = int(input(f'수정할 국어 점수는? (이전 점수:)'))
-    eng = int(input(f'수정할 영어 점수는? (이전 점수:)'))
-    mat = int(input(f'수정할 수학 점수는? (이전 점수:)'))
+    # 새로운 값을 입력
+    kor = int(input(f'새로운 국어 점수는? ({sj[1]}'))
+    eng = int(input(f'새로운 영어 점수는? ({sj[2]}'))
+    mat = int(input(f'새로운 수학 점수는? ({sj[3]}'))
 
-    # 다시 성적 처리
-    # sj = {'name': name, 'kor': kor, 'eng': eng, 'mat': mat}
+        # 다시 성적 처리
     sj = [name, kor, eng, mat]
     tot, avg, grd = computeSunkJuk(sj)
-
-    # sj['tot'] = tot
-    # sj['avg'] = avg
-    # sj['grd'] = grd
     sj = sj + [tot, avg, grd]
 
+
     # 새롭게 입력된 성적데이터를 기존 성적데이터에 반영
+    conn, cur = db.openConn()
+
+    sql = "update sungjuk set kor=%(kr)s, eng=%(en)s, mat=%(mt)s, tot=%(tt)s, avg=%(av)s, grd=%(gd)s, regdate=current_timestamp where name = %(nm)s"
+    params = dict(nm=sj[0], kr=sj[1], en=sj[2], mt=sj[3], tt=sj[4], av=sj[5], gd=sj[6])
+
+    cur.execute(sql, params)
+    cnt = cur.rowcount
+    conn.commit()
+
+    row = cur.fetchone()
+
+    db.closeConn(conn, cur)
+
+    if cnt > 0 : print('성공적으로 수정되었습니다.')
+    else: print('수정에 실패했습니다. 이름을 확인해주세요.')
+
 
 def removeSungJuk():
     name = input('삭제할 데이터의 학생 이름은?')
 
     # 삭제할 학생이름 입력받아 성적테이블에서 해당 학생 데이터 삭제
+    conn, cur = db.openConn()
 
+    sql = 'delete from sungjuk where name = %s'
+    cur.execute(sql, [name])
+    cnt = cur.rowcount
+    conn.commit()
+
+    db.closeConn(conn, cur)
+
+    if cnt > 0: print('성공적으로 삭제 되었습니다.')
+    else: print('삭제에 실패했습니다. 이름을 확인해주세요.')
 def computeSunkJuk(sj):
     tot = sj[1] + sj[2] + sj[3]
     avg = tot / 3
