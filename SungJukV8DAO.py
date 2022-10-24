@@ -1,6 +1,6 @@
 import awsdbinfo as db
 
-class SungJukv8DAO:
+class SungJukV8DAO:
     @staticmethod
     def insert_sungjuk(sj):
         conn, cur = db.openConn()

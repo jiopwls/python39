@@ -1,8 +1,8 @@
 from SungJukVO import SungJukVO
-from SungJukv8DAO import SungJukv8DAO as sjdao
+from SungJukV8DAO import SungJukV8DAO as sjdao
 
 
-class SungJukv8Lib:
+class SungJuk_v8Lib:
     @staticmethod
     def display_menu():
         main_menu = f'''
@@ -33,10 +33,10 @@ class SungJukv8Lib:
     @staticmethod
     def add_sungjuk():
         # 성적 데이터 입력받기
-        sj = SungJukv8Lib.__input_sungjuk()
+        sj = SungJuk_v8Lib.__input_sungjuk()
 
         # 입력받은 성적데이터 처리
-        SungJukv8Lib.__compute_sungjuk(sj)
+        SungJuk_v8Lib.__compute_sungjuk(sj)
 
         # 성적 데이터 테이블에 저장
         if sjdao.insert_sungjuk(sj) > 0:
@@ -83,7 +83,7 @@ class SungJukv8Lib:
 
         # 다시 성적 처리
         sj = SungJukVO(name, kor, eng, mat)
-        SungJukv8Lib.__compute_sungjuk(sj)
+        SungJuk_v8Lib.__compute_sungjuk(sj)
 
         cnt = sjdao.update_sungjuk(sj)
 
